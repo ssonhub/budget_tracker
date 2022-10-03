@@ -3,10 +3,6 @@ import 'package:budget_tracker/model/transaction_item.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-/* For us to be able to display the cards when we click a button,
- we need some sort of state management that holds the List of cards 
- being displayed on the screen */
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -15,9 +11,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  /* Let's create a list of transaction items to be displayed now.
-  we'll add and remove from that List to be able to populate our transactions.
-  The List will be of TransactionItem and will be empty to start */
   List<TransactionItem> items = [];
 
   @override
@@ -26,9 +19,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          /* showDialog function takes in context and a builder as parameters.
-          The builder just builds(returns) the AddTransactionDialog that we created
-          AddTransactionDialog takes in an Function */
           showDialog(
             context: context,
             builder: (context) {
@@ -82,18 +72,6 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 10,
                 ),
-
-                /* you want the entire screen to be scrollable, not just the list
-      (whwere you could achieve it with a ListView.builder()) 
-      
-      we'll call a generate method that is part of the List. This method takes
-      in the size of the list as a parameter and provides a generator, which is
-      just a callback with an int parameter representing the index that
-      returns an index for each item */
-
-                /* The only problem with this code is that it returns a List<Widget> and
-      our column won't accept that. Thankfully we can use the spread operator (...) */
-
                 ...List.generate(
                   items.length,
                   (index) => TransactionCard(
