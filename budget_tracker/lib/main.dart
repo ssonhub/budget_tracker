@@ -15,7 +15,11 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          /* colorScheme: we can actually generate an entire color scheme from
+          1 single color throughout aour app*/
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.indigo, brightness: Brightness.dark),
         ),
-        home: Home());
+        home: const Home());
   }
 }
