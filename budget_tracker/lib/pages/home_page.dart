@@ -18,10 +18,9 @@ class HomePage extends StatelessWidget {
               Align(
                 alignment: Alignment.topCenter,
                 child: CircularPercentIndicator(
-                  // we set the radius to be half of the screen width every time
                   radius: screenSize.width / 2,
-                  lineWidth: 10.0, // how thick the line is
-                  percent: .5, // percent goes from 0 -> 1
+                  lineWidth: 10.0,
+                  percent: .5,
                   backgroundColor: Colors.white,
                   center: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -37,10 +36,6 @@ class HomePage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  /* To be able to use our Theme throughout the app,
-                  we can access it using Theme.of(context).colorScheme
-                  There are many fields inside the .colorScheme but here we
-                  want the primary color, so we can just say .primary */
                   progressColor: Theme.of(context).colorScheme.primary,
                 ),
               ),
@@ -53,6 +48,16 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(
                 height: 10,
+              ),
+              const TransactionCard(
+                amount: 105.99,
+                text: "Apple Watch",
+                isExpense: true,
+              ),
+              const TransactionCard(
+                amount: 800,
+                text: "Apple iPhone",
+                isExpense: false,
               )
             ],
           ),
@@ -101,12 +106,6 @@ class TransactionCard extends StatelessWidget {
             ),
             const Spacer(),
             Text(
-              /* we used the isExpense boolean to indicate if the + or - sign
-              would appear next to the amount price 
-              
-              You can test it out now by calling various TransactionCard
-              inside the Column of our HomePage*/
-
               (!isExpense ? "+ " : "- ") + amount.toString(),
               style: const TextStyle(
                 fontSize: 16,
