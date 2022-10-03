@@ -1,3 +1,4 @@
+import 'package:budget_tracker/model/add_dialog.dart';
 import 'package:budget_tracker/model/transaction_item.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -25,10 +26,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          setState(
-            () {
-              items.add(
-                TransactionItem(amount: 5.99, itemTitle: "Food"),
+          /* showDialog function takes in context and a builder as parameters.
+          The builder just builds(returns) the AddTransactionDialog that we created
+          AddTransactionDialog takes in an Function */
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AddTransactionDialog(
+                itemToAdd: (transactionitem) {},
               );
             },
           );
