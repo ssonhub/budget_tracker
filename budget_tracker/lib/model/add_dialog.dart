@@ -18,6 +18,14 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
   final TextEditingController itemTitleController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
 
+  /* The Swtich takes in 2 important parameters: value: and onChanged:
+  Value represents if it is true or false, and onChange tells us if 
+  the switch changed state (was tapped)
+  
+  Let's first create a switch controller that will be just a boolean field
+  in the body of the stateful widget that will represent the stae of the switch */
+
+  bool _isExpenseController = true;
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -35,17 +43,34 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
               const SizedBox(
                 height: 15,
               ),
-              const TextField(
-                // controller: itemTitleController,
+              TextField(
+                controller: itemTitleController,
                 decoration: InputDecoration(hintText: "Name of expense"),
               ),
               TextField(
-                // controller: amountController,
+                controller: amountController,
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
                 ],
                 decoration: const InputDecoration(hintText: "Amount in \$"),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Is expense?"),
+                  Switch.adaptive(
+                    value: _isExpenseController,
+                    onChanged: (b) {
+                      setState(() {
+                        _isExpenseController = b;
+                      });
+                    },
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 15,
               ),
             ],
           ),
