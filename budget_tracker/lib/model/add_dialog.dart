@@ -45,7 +45,7 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
               ),
               TextField(
                 controller: itemTitleController,
-                decoration: InputDecoration(hintText: "Name of expense"),
+                decoration: const InputDecoration(hintText: "Name of expense"),
               ),
               TextField(
                 controller: amountController,
