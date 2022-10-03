@@ -72,6 +72,23 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
               const SizedBox(
                 height: 15,
               ),
+              ElevatedButton(
+                  onPressed: () {
+                    if (amountController.text.isNotEmpty &&
+                        itemTitleController.text.isNotEmpty) {
+                      /* let's call the function itemToAdd to pass that
+                      to the parent width which is Home */
+                      widget.itemToAdd(TransactionItem(
+                          itemTitle: itemTitleController.text,
+                          amount: double.parse(
+                            amountController.text,
+                          ),
+                          /* Don't forget to pass the _isExpenseController
+                          to the isExpense: parameter */
+                          isExpense: _isExpenseController));
+                    }
+                  },
+                  child: const Text("Add"))
             ],
           ),
         ),
