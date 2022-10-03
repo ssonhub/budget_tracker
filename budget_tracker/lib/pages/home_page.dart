@@ -23,7 +23,11 @@ class _HomePageState extends State<HomePage> {
             context: context,
             builder: (context) {
               return AddTransactionDialog(
-                itemToAdd: (transactionitem) {},
+                itemToAdd: (transactionItem) {
+                  setState(() {
+                    items.add(transactionItem);
+                  });
+                },
               );
             },
           );

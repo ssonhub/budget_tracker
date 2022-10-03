@@ -86,6 +86,7 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                           /* Don't forget to pass the _isExpenseController
                           to the isExpense: parameter */
                           isExpense: _isExpenseController));
+                      Navigator.pop(context);
                     }
                   },
                   child: const Text("Add"))
