@@ -1,3 +1,4 @@
+import 'package:budget_tracker/model/transaction_item.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -49,16 +50,6 @@ class HomePage extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              const TransactionCard(
-                amount: 105.99,
-                text: "Apple Watch",
-                isExpense: true,
-              ),
-              const TransactionCard(
-                amount: 800,
-                text: "Apple iPhone",
-                isExpense: false,
-              )
             ],
           ),
         ),
@@ -68,15 +59,12 @@ class HomePage extends StatelessWidget {
 }
 
 class TransactionCard extends StatelessWidget {
-  final String text;
-  final double amount;
-  final bool isExpense;
+  final TransactionItem item;
 
-  const TransactionCard(
-      {super.key,
-      required this.text,
-      required this.amount,
-      required this.isExpense});
+  const TransactionCard({
+    super.key,
+    required this.item,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -99,14 +87,14 @@ class TransactionCard extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              text,
+              item.itemTitle,
               style: const TextStyle(
                 fontSize: 18,
               ),
             ),
             const Spacer(),
             Text(
-              (!isExpense ? "+ " : "- ") + amount.toString(),
+              (!item.isExpense ? "+ " : "- ") + item.amount.toString(),
               style: const TextStyle(
                 fontSize: 16,
               ),
