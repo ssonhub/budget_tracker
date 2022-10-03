@@ -1,7 +1,7 @@
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import 'package:flutter/material.dart';
+
+import '../pages/home_page.dart';
+import '../pages/profile_page.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -41,15 +41,21 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text("Budget Tracker"),
       ),
-      // parameter we can call pages[_crrentPageIndex]
-      // This will render the page selection accordingly
       body: pages[_currentPageIndex],
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentPageIndex,
         items: bottomNavItems,
-        /* BottomNavigationBar widget has an onTap(int) 
-        when we click the Home icon, it would print out 0 and for the Profile
-        icon, it would print out 1*/
-        onTap: (index) => print(index),
+
+        /* let's pass our _currentPageIndex to the currentIndex: parameter
+    so the BottomNavigatorBar knows which page is active */
+
+        /* But there is a problem with this code. when you hot restart and click
+    on the profile, nothing changes. That's because we haven't added setState */
+        onTap: (index) {
+          setState(() {
+            _currentPageIndex = index;
+          });
+        },
       ),
     );
   }
