@@ -1,3 +1,4 @@
+import 'package:budget_tracker/screens/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {
