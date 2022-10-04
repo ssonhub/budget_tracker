@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../model/add_budget.dart';
 import '../pages/home_page.dart';
 import '../pages/profile_page.dart';
+import '../services/budget_service.dart';
 import '../services/theme_service.dart';
 
 class Home extends StatefulWidget {
@@ -28,19 +29,11 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    /* Now to access the theme data inside Theme Service
-    we can use this syntax to get/set information */
-
-    /* Remember that you need to access the themeService and you can do that
-    by calling it after the build method */
     final themeService = Provider.of<ThemeService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Budget Tracker"),
-        /* leading: means that the widget will show on the left of the AppBar */
         leading: IconButton(
-          /* Notice how we set the themeService.darkTheme = !themeService.darkTheme
-          This is a great way to do it when you need to toggle something */
           onPressed: () {
             themeService.darkTheme = !themeService.darkTheme;
           },
@@ -53,7 +46,20 @@ class _HomeState extends State<Home> {
                   context: context,
                   builder: (context) {
                     return AddBudgetDialog(
-                      budgetToAdd: (budget) {},
+                      budgetToAdd: (budget) {
+                        /* we need to set our budget using the callback coming
+                        from the AddBudgetDialog on the IconButton
+                        We do that by getting our service from the provider
+                        and setting the budgetService.budget to the budget
+                        we inputted in the Dialog */
+                        final budgetService =
+                            Provider.of<BudgetService>(context, listen: false);
+                        /* Notice the listen:false
+                        that's because we don't want to rebuild that widget
+                        when we change the budget. Now when you input, your budget's
+                        state will be saved by BudgetService */
+                        budgetService.budget = budget;
+                      },
                     );
                   });
             },

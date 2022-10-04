@@ -1,4 +1,5 @@
 import 'package:budget_tracker/screens/home.dart';
+import 'package:budget_tracker/services/budget_service.dart';
 import 'package:budget_tracker/services/theme_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,15 +13,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Always create your providers above the widget tree
-    /* we can wrap our MaterialApp with the ChangeNotifierProvider now
-    but when creating the provider, you can't use it directly due to context issues.
-    And we need to use it as soon as possible as our Theme is defined inside MaterialApp
-    
-    Because we need to access the provider as soon as we create, we need a Builder widget
-    inbetween to provide us with the necessary parent context */
-    return ChangeNotifierProvider<ThemeService>(
-      create: (_) => ThemeService(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeService>(create: (_) => ThemeService()),
+        ChangeNotifierProvider<BudgetService>(create: (_) => BudgetService()),
+      ],
       child: Builder(builder: (BuildContext context) {
         final themeService = Provider.of<ThemeService>(context);
         return MaterialApp(
@@ -29,9 +26,6 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               colorScheme: ColorScheme.fromSeed(
                 seedColor: Colors.indigo,
-
-                /* we can use themeService.darkTheme to determine if we are
-                in dark mode or not */
                 brightness:
                     themeService.darkTheme ? Brightness.dark : Brightness.light,
               ),
