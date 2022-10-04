@@ -13,6 +13,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /* After calling notifyListeners on budget_service.dart, we need to go to
+    main.dart to initialize it. The problem is that we are currently already
+    returning a Theme service provider, so we need a way to initialize
+    multiple providers at the same time
+    
+    Thankfully, there is a MultiProvider widget that takes in multiple providers */
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ThemeService>(create: (_) => ThemeService()),

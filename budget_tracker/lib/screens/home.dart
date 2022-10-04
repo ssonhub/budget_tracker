@@ -47,17 +47,9 @@ class _HomeState extends State<Home> {
                   builder: (context) {
                     return AddBudgetDialog(
                       budgetToAdd: (budget) {
-                        /* we need to set our budget using the callback coming
-                        from the AddBudgetDialog on the IconButton
-                        We do that by getting our service from the provider
-                        and setting the budgetService.budget to the budget
-                        we inputted in the Dialog */
                         final budgetService =
                             Provider.of<BudgetService>(context, listen: false);
-                        /* Notice the listen:false
-                        that's because we don't want to rebuild that widget
-                        when we change the budget. Now when you input, your budget's
-                        state will be saved by BudgetService */
+
                         budgetService.budget = budget;
                       },
                     );
