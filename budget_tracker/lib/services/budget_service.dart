@@ -21,7 +21,7 @@ class BudgetService extends ChangeNotifier {
 
   double balance = 0.0;
 
-  List<TransactionItem> _items = [];
+  final List<TransactionItem> _items = [];
   List<TransactionItem> get items => _items;
 
   set budget(double value) {
