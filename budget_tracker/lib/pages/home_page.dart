@@ -5,15 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+/* The goal here is to make HomePage a stateless widget, so it is optimized */
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  List<TransactionItem> items = [];
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +21,10 @@ class _HomePageState extends State<HomePage> {
             builder: (context) {
               return AddTransactionDialog(
                 itemToAdd: (transactionItem) {
-                  setState(() {
-                    items.add(transactionItem);
-                  });
+                  final budgetService =
+                      Provider.of<BudgetService>(context, listen: false);
+                  budgetService.addItem(transactionItem);
+                  // setState() {} // NO need for that anymore
                 },
               );
             },
@@ -46,35 +42,31 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Align(
                   alignment: Alignment.topCenter,
-                  /* when we insert a budget, it will rebuild the entire HomePage
-                    widget. That's not very efficient as we only want couple of things that
-                    are mostly inside CircularPercentIndicator 
-                    
-                    In order to optimize that for rebuilds, we can wrap the CircularPercentIndicator
-                    in a Consumer<BudgetService> widget that will rebuild when the state changes,
-                    but only what's inside of it*/
-
-                  /* Consumer has a builder that provides a context, a value and a child.
-                    The value is the one that requires more attention as it is the budget service
-                    (the same value as if you did final budgetService = Provider.of<BudgetService>(context);)
-                    
-                    So if you want to access the budget variable inside BudgetService, all you do is
-                    value.budget like we did earlier */
                   child: Consumer<BudgetService>(
                     builder: ((context, value, child) {
-                      final budgetService = Provider.of<BudgetService>(context);
-
+                      /* In the main Column, update our percent: with the
+                        value.balance as the numerator 
+                        
+                        Here we are telling the graph to render a percentage
+                        based on the balance that we hvae divided by our budget.
+                        this will fill in the purple line on the indicator*/
                       return CircularPercentIndicator(
-                        radius: screenSize.width / 2,
+                        radius: screenSize.width / 3,
                         lineWidth: 10.0,
-                        percent: .5 / budgetService.budget,
+                        percent: value.balance / value.budget,
                         backgroundColor: Colors.white,
                         center: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Text(
-                              "\$0",
-                              style: TextStyle(
+                            /* Edit the text to  get rid of a trailing "."
+                            that would appear if we covert from double to string
+                            directly in our balance display 
+                            
+                            This method is used to get the value on the left side of the "."
+                            So if it was displaying $540.5, now it just displays the $540 */
+                            Text(
+                              "\$" + value.balance.toString().split(".")[0],
+                              style: const TextStyle(
                                   fontSize: 48, fontWeight: FontWeight.bold),
                             ),
                             const Text(
@@ -82,9 +74,9 @@ class _HomePageState extends State<HomePage> {
                               style: TextStyle(fontSize: 18),
                             ),
                             Text(
-                              "Budget: \$" + budgetService.budget.toString(),
+                              "Budget: \$" + value.budget.toString(),
                               style: const TextStyle(fontSize: 10),
-                            )
+                            ),
                           ],
                         ),
                         progressColor: Theme.of(context).colorScheme.primary,
@@ -102,12 +94,33 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 10,
                 ),
+                /* If we scroll a bit down, we can see that we were rendering our
+                List of transaction using ...List.generate() -> I already commented it out tho
+                This is fine if we have a few items and no state, but the preferred way is
+                using a ListView.builder().
+                We now will use a Consumer widget on top of it to provide the items from
+                BudgetService and optimize it to only rebuild when the BudgetService changes */
+
                 // ...List.generate(
                 //   items.length,
                 //   (index) => TransactionCard(
                 //     item: items[index],
                 //   ),
                 // ),
+
+                Consumer<BudgetService>(
+                  builder: ((context, value, child) {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: value.items.length,
+                        physics: const ClampingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return TransactionCard(
+                            item: value.items[index],
+                          );
+                        });
+                  }),
+                ),
               ],
             ),
           ),
